@@ -15,7 +15,6 @@ class UsageTest extends SpecificationWithJUnit {
 
   "Server and client" should{
     "initialized and work" in{
-
       val server = ScalaServer().withModifyDispatcherBuilder(d => {
         new StopWatchDispatcherBuilder(d).withVerboseOutput(true)
       }).withServeObject(new SampleServer()).listen(12345)

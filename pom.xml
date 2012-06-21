@@ -23,6 +23,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scalap</artifactId>
+            <version>${scala.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>msgpack-scala_2.9.1</artifactId>
             <version>${project.version}</version>

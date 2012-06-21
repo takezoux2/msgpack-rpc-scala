@@ -14,7 +14,6 @@ import org.msgpack.scalarpc.reflect.{ScalapProxyBuilder, ScalapInvokerBuilder}
 
 class ScalaDispatcherBuilder extends DispatcherBuilder {
   def build( handler : Any, messagePack : MessagePack): Dispatcher = {
-    println("MPACK" + messagePack)
     new MethodDispatcher(
       new Reflect(
         new ScalapInvokerBuilder(messagePack),

@@ -5,6 +5,7 @@ import org.msgpack.rpc.reflect.Reflect
 import org.msgpack.rpc.Client
 import org.msgpack.{MessagePack, ScalaMessagePack}
 import reflect.{ScalapProxyBuilder, ScalapInvokerBuilder}
+import org.msgpack.rpc.config.TcpClientConfig
 
 /**
  *
@@ -12,21 +13,8 @@ import reflect.{ScalapProxyBuilder, ScalapInvokerBuilder}
  * Create: 12/06/15 15:49
  */
 
-class ScalaClient(host : String,port : Int, loop : EventLoop,reflect : Reflect) {
+class ScalaClient(client : Client) {
 
-  def this(host : String,port : Int , msgpack : MessagePack) = {
-    this(host,port,EventLoop.start(msgpack),new Reflect(
-      new ScalapInvokerBuilder(msgpack),
-      new ScalapProxyBuilder(msgpack)
-    ))
-  }
-
-  val client = new Client(host,port,loop,reflect)
-
-  def withTimeoutSecs( secs : Int) = {
-    client.setRequestTimeout(secs)
-    this
-  }
 
   def proxy[T](implicit m : Manifest[T]) = {
     client.proxy(m.erasure.asInstanceOf[Class[T]])
@@ -50,8 +38,11 @@ class ScalaClient(host : String,port : Int, loop : EventLoop,reflect : Reflect) 
 
 object ScalaClient{
 
-  def apply(host : String ,port : Int) = {
-    val mp = ScalaMessagePack.messagePack
-    new ScalaClient(host,port,mp)
+  def apply() : ScalaClientBuilder[Nothing] = {
+    new ScalaClientBuilder[Nothing](new SClientConfig[Nothing]("",0,EventLoop.start(ScalaMessagePack.messagePack),new TcpClientConfig()))
+  }
+
+  def apply(host : String ,port : Int) : ScalaClient = {
+    apply().connect(host,port)
   }
 }
